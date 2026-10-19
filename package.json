@@ -1,0 +1,23 @@
+{
+  "name": "jasmines-odyssey",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "vitest run",
+    "test:browser": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.0",
+    "typescript": "~5.9.3",
+    "vite": "^7.2.0",
+    "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "@fontsource-variable/dm-sans": "^5.3.0",
+    "@fontsource-variable/fraunces": "^5.3.0"
+  }
+}

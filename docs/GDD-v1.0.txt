@@ -1,0 +1,144 @@
+JASMINE'S ODYSSEY
+寧寧要回家
+Platform-Independent Game Design Document | Version 1.0 | Approved design baseline
+1. Product Vision
+Jasmine is a little girl carrying a magical lantern through a mysterious dark forest. She must navigate a partially hidden maze to reach home. The game rewards exploration, spatial memory, illumination timing, and increasingly efficient movement.
+Design principles
+Discovery over complexity: visibility is the obstacle; the maze is the stage.
+Player mastery comes from memory, observation, and execution—not upgrades.
+Stopwatch and leaderboards encourage improvement without imposing a time limit.
+Multiple valid strategies: frequent lantern use, cautious exploration, or memory-only navigation.
+Family-friendly, bilingual, platform-independent, and reasonably extensible.
+2. Core Gameplay
+Each maze has a fixed forest entrance, a fixed home destination, walkable corridors, walls, and fog of war. Start at the entrance, explore, optionally illuminate, interpret the revealed passages, and reach home. On completion show elapsed time and lantern uses; allow replay or another maze.
+The stopwatch counts up; no countdown or failure due to elapsed time.
+A new attempt resets Jasmine's location, fog exploration, lantern charge, stopwatch, and lantern-use count.
+Real-world player memory is naturally retained.
+3. Fixed Maze Collection and Curation
+Version 1.0 contains ten fixed, repeatable mazes, all unlocked. Each has a unique ID, displayed number, optional localized name, predefined geometry, entrance, destination, and independent leaderboard. The same maze must be identical across runs and application restarts.
+Mazes should be relatively easy to solve when fully visible. Their challenge comes primarily from limited visibility.
+Curate intersections, corridor lengths, dead ends, alternate routes, and places where a one-second flash reveals strategically useful information.
+Mazes must be distinct and varied without becoming unnecessarily complicated.
+Hand design or generate during development then curate; do not generate random layouts at runtime.
+Validate reachability, wall integrity, collision behavior, unintended shortcuts, and playability.
+Maze selection must not reveal a full overhead solution map.
+Working maze names (editable)
+1. Forest Entrance; 2. Firefly Trail; 3. Whispering Trees; 4. Moonlit Crossing; 5. Mossy Passage; 6. Owl’s Watch; 7. Forgotten Grove; 8. Starlight Path; 9. Lantern Hollow; 10. Homeward Bound.
+4. Movement and Collision
+The maze uses grid-based geometry, but Jasmine moves smoothly with continuous coordinates, not one cell per keypress.
+Desktop: arrow keys or WASD to move; Space to activate lantern.
+Touch: on-screen directional controls and dedicated lantern button.
+Consistent speed independent of frame rate; normalize diagonal movement to avoid speed advantage.
+Impassable walls with robust collision; allow sliding along walls where appropriate.
+Character collision footprint should match visible scale; no unintended wall clipping.
+Movement continues during flash and recharge.
+Same maze geometry and movement rules on repeated attempts; no randomized movement effects.
+Casual local competition is intended; exact cross-device competitive equivalence is not promised.
+5. Fog of War
+Visibility has three states: unexplored (hidden), explored (dimly visible), and currently illuminated (fully bright).
+Initially only a small area around Jasmine is visible; starting tuning radius approximately one maze cell.
+Movement reveals nearby passages and terrain.
+Every revealed area remains dimly visible for the rest of that attempt, including areas revealed by the lantern.
+Exploration resets on restart/replay; it does not carry into subsequent attempts.
+Tune normal visibility to preserve navigation clarity and the intended mystery.
+6. Magical Lantern
+The lantern starts fully charged and is optional: every maze must be completable without activating it.
+Space or touch button activates when ready.
+A bright circular flash centered on Jasmine lasts approximately 1.0 second.
+Initial illumination diameter is approximately five Jasmine character widths, measured in world coordinates, not screen pixels.
+Magic reveals all geometry within radius, including corridors beyond walls; walls do not block illumination.
+Jasmine can move during the flash; revealed areas stay dim afterward.
+Recharge is five seconds measured from activation; premature activation has no effect.
+Show ready/recharge progress and clear activation feedback; avoid harsh strobes and offer reduced-effects behavior.
+Count only successful activations. Lantern uses never penalize leaderboard rank.
+7. Stopwatch and Completion
+Track elapsed gameplay time with millisecond precision; display minutes, seconds, and hundredths (e.g., 01:24.35). Start when the attempt begins and stop immediately on entering the home destination area.
+Restart resets time; lantern activation never pauses it.
+Define consistent pause/background/suspension handling; recommended default is to pause gameplay time when explicitly paused or suspended.
+At completion stop movement and display time, lantern uses, achievements, leaderboard qualification, and replay/maze selection.
+English: “Congratulations, you're home! Wanna try another maze?”
+Traditional Chinese: “恭喜！寧寧平安到家了！要不要再挑戰一座迷宮？”
+8. Local Leaderboards
+Each maze has an independent locally stored leaderboard. No backend, accounts, cloud synchronization, or online service is required.
+Rank strictly by shortest completion time; lantern uses are informational.
+Recommended limit: five best runs per maze.
+Record maze ID, player name, completion time, lantern uses, achievement marker, optionally completion date.
+Ask for a display name when a run qualifies; offer a sensible default. Treat names as plain text.
+Persist across sessions where device/browser storage permits; handle unavailable or corrupted storage gracefully.
+Allow clearing local records with confirmation.
+Clarify that local records are not tamper-proof and may disappear if browser data is cleared.
+9. Achievement: No Lantern Run
+English: No Lantern Run. Traditional Chinese: 無燈挑戰.
+Earned when Jasmine reaches home with exactly zero successful lantern activations.
+Available on all ten mazes.
+Display on completion and optionally next to qualifying leaderboard entries.
+Does not affect time or leaderboard rank.
+Achievement evaluation should support adding new conditions in the future without changing core movement/maze logic.
+10. Localization
+English (en) is the default; Traditional Chinese (zh-TW) is fully supported. English title: Jasmine’s Odyssey; Chinese title: 寧寧要回家 (intentionally not literal).
+Accessible language toggle on title screen and during gameplay or settings.
+Switching language must not restart gameplay or erase progress.
+Translate all player-facing strings: buttons, maze names, labels, status, dialogs, achievements, leaderboard, errors, completion.
+Use centralized keyed translation resources, not strings scattered throughout gameplay logic.
+Remember language preference locally where supported.
+11. Art, Audio, and Accessibility
+Cute, whimsical, cohesive storybook aesthetic: a recognizable little girl with a magical lantern, warm golden illumination, soft forest colors, trees, shrubs, paths, and a welcoming home. Mysterious but not frightening; suitable for families.
+Readability outranks decoration; distinguish walls, paths, Jasmine, and destination.
+Avoid excessive flash/strobe; reduced-effects option preserves information.
+Gentle optional sound effects for activation, recharge, completion, and achievement.
+Mute control; game remains fully playable without sound.
+12. User Interface
+Title screen: localized title, start/maze selection, leaderboards, language, settings.
+Maze selector: ten unlocked mazes, number/name, optional personal best and No Lantern Run marker; no full solution preview.
+Gameplay: maze, Jasmine, stopwatch, lantern indicator/button, maze number, pause/restart/back, accessible language toggle.
+Completion: congratulations, time, lantern uses, achievement, leaderboard qualification, replay, another maze.
+Restart/exit from active attempt requires confirmation; cancel preserves the run.
+Responsive layout prioritizes maze area and usable touch controls.
+13. Modular Architecture
+Keep conceptual responsibilities separated, without mandating specific source files or classes:
+Maze data: IDs, grid, walls, corridors, entrance, home, metadata, optional future object placements.
+Movement/collision: continuous coordinates, input, speed, walls, home detection.
+Visibility: normal radius, explored state, illuminated state, fog rendering.
+Lantern: activation, flash, cooldown, usage count.
+Game session: selected maze, timer, pause, restart, completion.
+Records: leaderboard, persistence, achievements.
+Presentation/localization: art, UI, language, audio.
+Implementation technology and framework remain developer choices; architecture should remain adaptable to Godot.
+14. Platform-Neutral Data Contracts
+Maze definition should contain schemaVersion, mazeId, nameKey, gridWidth, gridHeight, cells, entrance, and home. Define coordinate system and cell ordering unambiguously.
+Session state should track mazeId, playerPosition, elapsedTimeMs, exploredAreas, lanternCooldown, lanternUses, and sessionStatus.
+Leaderboard record should include mazeId, playerName, completionTimeMs, lanternUses, noLanternRun, and optionally completedAt.
+Use explicit schema versions. Platform-specific internal representations are permitted if maze geometry and behavior remain equivalent.
+15. Future Extensibility — Not Version 1.0
+Principle: “Keep the doors open, but don't build rooms you may never enter.”
+Future possibilities: collectible treasures, all-treasure completion, treasure-versus-time tradeoffs, separate Homeward Sprint / Treasure Hunt / Perfect Journey modes, additional achievements.
+Keep geometry, world objects, visibility, scoring, and achievements reasonably decoupled.
+Do NOT implement collectibles, inventory, collectible scoring, alternate challenge modes, or speculative plugin frameworks in v1.0.
+Extensibility reduces avoidable coupling; it does not guarantee unknown future features require no redesign.
+16. Reliability
+Handle invalid or disconnected maze definitions, missing optional assets, unavailable/corrupted local storage, interrupted gameplay, and unsupported input/rendering capabilities. Core gameplay must work without audio or persistent storage. Explain errors clearly; do not silently destroy records.
+17. Acceptance Tests
+All ten authored mazes load, remain identical across attempts, and have reachable homes.
+Smooth keyboard/touch movement; diagonal normalization; collision blocks walls; movement during lantern flash.
+Unexplored areas hidden; normal movement reveals nearby areas; revealed areas stay dim until attempt ends; reset on restart.
+Flash illuminates through walls for ~1 second; cooldown ~5 seconds from activation; only ready activations count.
+Stopwatch starts/stops correctly; no time limit; completion at home works.
+Leaderboards separated per maze, time-ranked, persistent when supported, clearable with confirmation.
+No Lantern Run awarded iff lanternUses = 0 and completion succeeds; no ranking effect.
+Complete English/zh-TW coverage; toggle preserves active session.
+Game playable muted; visual clarity and reduced-effects behavior verified.
+Critical rules covered by automated or reproducible tests plus manual playtesting for maze enjoyment.
+18. Version 1.0 Scope
+INCLUDED: ten fixed curated mazes; bilingual UI; smooth movement and grid collisions; fog-of-war exploration; persistent dim revealed paths per attempt; 1-second flash; 5-second cooldown; stopwatch; local per-maze leaderboard; No Lantern Run; replay/restart/selection; platform-neutral maze data.
+EXCLUDED: runtime procedural generation, collectibles, inventory, treasure scoring, multiplayer, online leaderboards, accounts, cloud sync, paid content, character upgrades, additional modes.
+19. Implementation Freedom and Change Control
+Developer may choose language, framework/engine, rendering, project structure, collision implementation, storage, asset pipeline, and optimizations.
+Developer must NOT silently alter fixed maze count/layout policy, movement, exploration persistence, lantern timings, timekeeping, per-maze ranking, achievement condition, bilingual requirement, or version scope. Escalate meaningful deviations or ambiguities before changing agreed behavior.
+20. Definition of Done
+Ten validated, playable curated mazes with satisfying limited-visibility design.
+Smooth collision-safe movement, fog, flash, cooldown, and stopwatch work as specified.
+Independent local leaderboards and No Lantern Run achievement work correctly.
+Complete English and Traditional Chinese UI; keyboard and touch controls functional.
+Critical gameplay tests pass and manual playtesting confirms readability and challenge.
+Known limitations documented; no unapproved future features added.
+Provide instructions to run the game and a verification/completion report.
