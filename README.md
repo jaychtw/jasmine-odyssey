@@ -1,5 +1,7 @@
 # Jasmine’s Odyssey · 寧寧要回家
 
+**[Play Jasmine’s Odyssey · 開始遊玩《寧寧要回家》](https://jaychtw.github.io/jasmine-odyssey/)**
+
 A complete browser game about a little girl, a magical lantern, and finding the way home. Ten fixed, hand-authored forest mazes reward exploration, memory, and well-timed light. English is the default; Traditional Chinese is available throughout the interface.
 
 Built against the supplied **Jasmine’s Odyssey GDD v1.0**. A full text extraction is retained in [docs/GDD-v1.0.txt](docs/GDD-v1.0.txt).
@@ -26,7 +28,7 @@ Deploy the contents of `dist/` to any static HTTPS host. All game art, fonts, an
 
 ## Deployment
 
-The `Deploy game to GitHub Pages` workflow tests and builds the game on every push to `main`, then publishes `dist/` using GitHub Pages. In repository **Settings → Pages**, the source must be **GitHub Actions**. The deployment environment reports the live game URL after a successful publish.
+The `Deploy game to GitHub Pages` workflow tests and builds the game on every push to `main`, then publishes `dist/` using GitHub Pages. In repository **Settings → Pages**, the source must be **GitHub Actions**. The live game is available at **https://jaychtw.github.io/jasmine-odyssey/**. [Deployment status](https://github.com/jaychtw/jasmine-odyssey/actions/workflows/deploy.yml).
 
 The workflow sets `BASE_PATH=/jasmine-odyssey/` so scripts, fonts, and icons work on the GitHub project site. Local development continues to use `/`. For another host or project path, set `BASE_PATH` when building.
 
